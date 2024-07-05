@@ -7,7 +7,7 @@ eventually be incorporated into the latheControl repository.
 Please note that usage of the pigpio library (which appears to come pre-installed on
 Raspberry Pis) requires root, so the application needs to be run with `sudo`
 
-##Connection
+## Connection
 
 The glass scales (at least mine) have four connections, +5.0v, GND, pin A and pin B.
 
