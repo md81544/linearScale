@@ -17,8 +17,12 @@ int oldPhase = 0;
 
 void callback(int gpio, int level, uint32_t /*tick*/, void* /*userData*/)
 {
-    if (gpio==PIN_A) g_pinA = level;
-    if (gpio==PIN_B) g_pinB = level;
+    if (gpio == PIN_A) {
+        g_pinA = level;
+    }
+    if (gpio == PIN_B) {
+        g_pinB = level;
+    }
     newPhase = g_pinA ? (g_pinB ? 3 : 4) : (g_pinB ? 2 : 1);
 
     if (oldPhase == 4 && newPhase == 1) {
@@ -33,23 +37,23 @@ void callback(int gpio, int level, uint32_t /*tick*/, void* /*userData*/)
     oldPhase = newPhase;
     // My glass scale apparently uses one step per 5 microns, so a simple divide of
     // counter by 200.0 yields mm. This has been verified using digital calipers.
-    printf("%.2f mm\n", counter/200.0);
+    printf("%.2f mm\n", counter / 200.0);
 }
 
 int main()
 {
-    if ( gpioInitialise() < 0 )
-    {
+    if (gpioInitialise() < 0) {
         printf("Could not initialise pigpio library");
         return 1;
     }
-    gpioSetMode( PIN_A, PI_INPUT );
-    gpioSetMode( PIN_B, PI_INPUT );
-    gpioSetPullUpDown( PIN_A, PI_PUD_UP );
-    gpioSetPullUpDown( PIN_B, PI_PUD_UP );
+    gpioSetMode(PIN_A, PI_INPUT);
+    gpioSetMode(PIN_B, PI_INPUT);
+    gpioSetPullUpDown(PIN_A, PI_PUD_UP);
+    gpioSetPullUpDown(PIN_B, PI_PUD_UP);
     void* user = nullptr;
-    gpioSetAlertFuncEx( PIN_A, callback, user );
-    gpioSetAlertFuncEx( PIN_B, callback, user );
-    for(;;);
+    gpioSetAlertFuncEx(PIN_A, callback, user);
+    gpioSetAlertFuncEx(PIN_B, callback, user);
+    for (;;)
+        ;
     return 0;
 }
