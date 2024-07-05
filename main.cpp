@@ -17,20 +17,22 @@ int oldPhase = 0;
 
 void callback(int gpio, int level, uint32_t /*tick*/, void* /*userData*/)
 {
-    if(gpio==PIN_A) g_pinA = level;
-    if(gpio==PIN_B) g_pinB = level;
+    if (gpio==PIN_A) g_pinA = level;
+    if (gpio==PIN_B) g_pinB = level;
     newPhase = g_pinA ? (g_pinB ? 3 : 4) : (g_pinB ? 2 : 1);
 
     if (oldPhase == 4 && newPhase == 1) {
-        counter -= 1;
+        --counter;
     } else if (oldPhase == 1 && newPhase == 4) {
-        counter += 1;
+        ++counter;
     } else if (newPhase > oldPhase) {
-        counter -= 1;
+        --counter;
     } else if (newPhase < oldPhase) {
-        counter += 1;
+        ++counter;
     }
     oldPhase = newPhase;
+    // My glass scale apparently uses one step per 5 microns, so a simple divide of
+    // counter by 200.0 yields mm. This has been verified using digital calipers.
     printf("%.2f mm\n", counter/200.0);
 }
 
